@@ -1,0 +1,13 @@
+<mapper namespace="sampletest">
+
+    <!--sql的唯一标识 应该是由 namespace.id组成：statementId-->
+
+    <select id="findAll" resultType="">
+        select * from sample_test;
+    </select>
+
+    <select id="findById" resultType="" paramterType="">
+        select * from sample_test where id = #{id} ;
+    </select>
+
+</mapper>

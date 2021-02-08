@@ -1,0 +1,13 @@
+<configuration>
+    <!--数据库配置信息-->
+    <dataSource>
+        <property name ="driverClass" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name ="jdbcUrl" value="jdbc:mysql://47.99.212.4:3306/sampledb?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=GMT%2B8&amp;nullCatalogMeansCurrent=true"></property>
+        <property name ="username" value="sample"></property>
+        <property name ="password" value="sample"></property>
+    </dataSource>
+
+    <!--配置mapper文件路径-->
+    <mapper resource="TestMapper.xml"></mapper>
+
+</configuration>
