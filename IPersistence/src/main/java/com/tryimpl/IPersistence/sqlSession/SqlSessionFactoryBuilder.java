@@ -15,7 +15,7 @@ public class SqlSessionFactoryBuilder {
      */
     public SqlSessionFactory build(InputStream in) {
         XMLConfigBuilder xmlConfigBuilder = new XMLConfigBuilder();
-        Configuration configuration = xmlConfigBuilder.parseConfigXml(in);
+//        Configuration configuration = xmlConfigBuilder.parseConfigXml(in);
 
         return null;
     }
