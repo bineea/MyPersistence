@@ -13,10 +13,14 @@ public class SqlSessionFactoryBuilder {
      * @param in
      * @return
      */
-    public SqlSessionFactory build(InputStream in) {
+    public SqlSessionFactory build(InputStream in) throws Exception {
+        //解析配置文件，封装Configuration
         XMLConfigBuilder xmlConfigBuilder = new XMLConfigBuilder();
-//        Configuration configuration = xmlConfigBuilder.parseConfigXml(in);
+        Configuration configuration = xmlConfigBuilder.parseConfigXml(in);
 
-        return null;
+        //创建SqlSessionFactory对象，SqlSessionFactory是工厂对象用于创建SqlSession对象
+        DefaultSqlSessionFacory defaultSqlSessionFacory = new DefaultSqlSessionFacory(configuration);
+        defaultSqlSessionFacory.openSqlSession();
+        return defaultSqlSessionFacory;
     }
 }
