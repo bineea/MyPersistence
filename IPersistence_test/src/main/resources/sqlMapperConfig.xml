@@ -8,6 +8,6 @@
     </dataSource>
 
     <!--配置mapper文件路径-->
-    <mapper resource="TestMapper.xml"></mapper>
+    <mapper resource="mapper"></mapper>
 
 </configuration>

@@ -3,6 +3,7 @@ package com.tryimpl.IPersistence.config;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.tryimpl.IPersistence.io.Resources;
 import com.tryimpl.IPersistence.pojo.Configuration;
+import jdk.internal.util.xml.impl.Input;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -10,7 +11,11 @@ import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -55,16 +60,43 @@ public class XMLConfigBuilder {
         configuration.setDataSource(comboPooledDataSource);
 
         //解析mapper.xml
-        //TODO
+        List<Element> mapperList = rootElement.elements("mapper");
+        List<InputStream> mapperInputStreamList = new ArrayList<>();
+        for(Element mapper : mapperList) {
+            String resourcePath = mapper.attributeValue("resource");
+            Enumeration<URL> resources = Resources.class.getClassLoader().getResources(resourcePath);
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+                this.toLoadMapper(url, mapperInputStreamList);
+            }
+        }
+
+        if(mapperInputStreamList != null && !mapperInputStreamList.isEmpty()) {
+            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(configuration);
+            for(InputStream mapperInputStream : mapperInputStreamList) {
+                xmlMapperBuilder.parseMapperXml(mapperInputStream);
+            }
+        }
+
         return configuration;
     }
 
-    public static void main(String[] args) throws Exception {
-        XMLConfigBuilder xmlConfigBuilder = new XMLConfigBuilder();
-        InputStream resourceAsStream = XMLConfigBuilder.class.getClassLoader().getResourceAsStream("sqlMapperConfig.xml");
-        if(resourceAsStream == null) {
-            throw new Exception("配置文件不存在");
+    private void toLoadMapper(URL url, List<InputStream> mapperInputStreamList) throws IOException {
+        if(url == null) {
+            return;
         }
-        xmlConfigBuilder.parseConfigXml(resourceAsStream);
+        File mapperFile = new File(url.getPath());
+        if(mapperFile == null) {
+            return;
+        }
+        if(mapperFile.isFile()) {
+            mapperInputStreamList.add(url.openStream());
+        }
+        if(mapperFile.isDirectory()) {
+            for(File file : mapperFile.listFiles()) {
+                toLoadMapper(file.toURI().toURL(), mapperInputStreamList);
+            }
+        }
     }
+
 }
