@@ -6,7 +6,7 @@
         select * from sample_test;
     </select>
 
-    <select id="findById" resultType="" paramterType="">
+    <select id="findById" resultType="" parameterType="">
         select * from sample_test where id = #{id} ;
     </select>
 
