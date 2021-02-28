@@ -14,7 +14,7 @@ public interface SqlSession {
      * @param <E>
      * @return
      */
-    <E> List<E> findAll(String statementId, Object... parameter) throws Exception;
+    <E> List<E> selectAll(String statementId, Object... parameter) throws Exception;
 
     /**
      * 查询单条数据
@@ -23,6 +23,13 @@ public interface SqlSession {
      * @param <E>
      * @return
      */
-    <E> E findOne(String statementId, Object... parameter) throws Exception;
+    <E> E selectOne(String statementId, Object... parameter) throws Exception;
 
+    /**
+     * 创建代理对象
+     * @param clazz
+     * @param <E>
+     * @return
+     */
+    <E> E getMapper(Class<?> clazz);
 }

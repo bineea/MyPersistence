@@ -38,7 +38,7 @@ public class SimpleExecutor implements Executor {
             Class parameterClass = getClassByName(parameterType);
             for(int i=0; i<parameterMappings.size(); i++ ) {
                 Object obj = null;
-                if(parameterClass.isPrimitive() || parameterClass.isArray() || parameterClass.isAssignableFrom(Collection.class)) {
+                if(parameterClass.isPrimitive() || parameterClass.isArray() || Collection.class.isAssignableFrom(parameterClass)) {
                     if(parameterMappings.size() != parameters.length) {
                         throw new RuntimeException("参数个数与sql语句参数个数不匹配");
                     }

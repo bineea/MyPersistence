@@ -2,6 +2,11 @@ package com.tryimpl.IPersistence.sqlSession;
 
 import com.tryimpl.IPersistence.pojo.Configuration;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 
 public class DefaultSqlSession implements SqlSession {
@@ -13,14 +18,14 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
-    public <E> List<E> findAll(String statementId, Object... parameter) throws Exception {
+    public <E> List<E> selectAll(String statementId, Object... parameter) throws Exception {
         SimpleExecutor simpleExecutor = new SimpleExecutor();
         return simpleExecutor.query(configuration, configuration.getMappedStatementMap().get(statementId), parameter);
     }
 
     @Override
-    public <E> E findOne(String statementId, Object... parameter) throws Exception {
-        List<E> resultList = this.findAll(statementId, parameter);
+    public <E> E selectOne(String statementId, Object... parameter) throws Exception {
+        List<E> resultList = this.selectAll(statementId, parameter);
         if(resultList == null || resultList.isEmpty()) {
             return null;
         } else if(resultList.size() > 1) {
@@ -28,5 +33,28 @@ public class DefaultSqlSession implements SqlSession {
         } else {
             return resultList.get(0);
         }
+    }
+
+    @Override
+    public <E> E getMapper(Class<?> clazz) {
+
+        Object result = Proxy.newProxyInstance(DefaultSqlSession.class.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                String clazzName = method.getDeclaringClass().getName();
+                String methodName = method.getName();
+                // 因为无法通过dao获取mapper配置文件中的namespace和id，所以强制规定mapper配置文件的namespace就是dao的全限定名，而mapper配置文件方法的id就是dao的方法名
+                String statementId = clazzName + "." + methodName;
+                Class<?> returnType = method.getReturnType();
+                // 判断method返回结果是否为集合，决定调用selectOne方法还是selectAll方法
+                if (returnType.isArray() || Collection.class.isAssignableFrom(returnType)) {
+                    return selectAll(statementId, args);
+                } else {
+                    return selectOne(statementId, args);
+                }
+            }
+        });
+
+        return (E) result;
     }
 }
