@@ -3,11 +3,8 @@ package com.tryimpl.IPersistence.config;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.tryimpl.IPersistence.io.Resources;
 import com.tryimpl.IPersistence.pojo.Configuration;
-import jdk.internal.util.xml.impl.Input;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;

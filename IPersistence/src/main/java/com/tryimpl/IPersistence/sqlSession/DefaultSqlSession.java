@@ -1,6 +1,5 @@
 package com.tryimpl.IPersistence.sqlSession;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.SimpleExtension;
 import com.tryimpl.IPersistence.pojo.Configuration;
 
 import java.util.List;

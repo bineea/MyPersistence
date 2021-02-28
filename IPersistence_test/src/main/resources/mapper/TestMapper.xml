@@ -2,11 +2,11 @@
 
     <!--sql的唯一标识 应该是由 namespace.id组成：statementId-->
 
-    <select id="findAll" resultType="">
+    <select id="findAll" resultType="com.example.IPersistenceTest.pojo.Test">
         select * from sample_test;
     </select>
 
-    <select id="findById" resultType="" parameterType="">
+    <select id="findById" resultType="com.example.IPersistenceTest.pojo.Test" parameterType="com.example.IPersistenceTest.pojo.Test">
         select * from sample_test where id = #{id} ;
     </select>
 
