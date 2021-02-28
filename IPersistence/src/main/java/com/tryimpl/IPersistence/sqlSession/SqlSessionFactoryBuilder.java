@@ -20,7 +20,6 @@ public class SqlSessionFactoryBuilder {
 
         //创建SqlSessionFactory对象，SqlSessionFactory是工厂对象用于创建SqlSession对象
         DefaultSqlSessionFacory defaultSqlSessionFacory = new DefaultSqlSessionFacory(configuration);
-        defaultSqlSessionFacory.openSqlSession();
         return defaultSqlSessionFacory;
     }
 }
