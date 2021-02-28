@@ -1,4 +1,4 @@
-<mapper namespace="sampletest">
+<mapper namespace="com.example.IPersistenceTest.dao.TestDao">
 
     <!--sql的唯一标识 应该是由 namespace.id组成：statementId-->
 
