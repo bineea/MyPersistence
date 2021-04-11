@@ -89,6 +89,53 @@ public class SimpleExecutor implements Executor {
         return resultList;
     }
 
+    @Override
+    public int update(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception {
+        //1. 注册驱动，获取连接
+        Connection connection = configuration.getDataSource().getConnection();
+
+        //2. 获取sql语句，处理sql语句占位符，并将sql语句中的“#{XXX}”替换为“?”
+        ParameterMappingTokenHandler parameterMappingTokenHandler = new ParameterMappingTokenHandler();
+        GenericTokenParser genericTokenParser = new GenericTokenParser("#{", "}", parameterMappingTokenHandler);
+        String jdbcSql = genericTokenParser.parse(mappedStatement.getSql());
+
+        //3. 获取sql语句占位符，解析存储sql语句占位符
+        List<ParameterMapping> parameterMappings = parameterMappingTokenHandler.getParameterMappings();
+
+        //4. 获取预处理对象
+        PreparedStatement preparedStatement = connection.prepareStatement(jdbcSql);
+
+        //5. 设置参数，赋值占位符
+        String parameterType = mappedStatement.getParameterType();
+        if(parameterType != null && !parameterType.trim().isEmpty()) {
+            Class parameterClass = getClassByName(parameterType);
+            for(int i=0; i<parameterMappings.size(); i++ ) {
+                Object obj = null;
+                if(parameterClass.isPrimitive() || parameterClass.isArray() || Collection.class.isAssignableFrom(parameterClass)) {
+                    if(parameterMappings.size() != parameters.length) {
+                        throw new RuntimeException("参数个数与sql语句参数个数不匹配");
+                    }
+                    obj = parameters[i];
+                } else {
+                    Field field = parameterClass.getDeclaredField(parameterMappings.get(i).getContent());
+                    field.setAccessible(true);
+                    obj = field.get(parameters[0]);
+                }
+                preparedStatement.setObject(i+1, obj);
+            }
+        } else {
+            for(int i=0; i<parameterMappings.size(); i++ ) {
+                if(parameterMappings.size() != parameters.length) {
+                    throw new RuntimeException("参数个数与sql语句参数个数不匹配");
+                }
+                preparedStatement.setObject(i+1, parameters[i]);
+            }
+        }
+
+        //6. 执行sql语句
+        return preparedStatement.executeUpdate();
+    }
+
     private Class getClassByName(String name) throws ClassNotFoundException {
         if(name != null && !name.trim().equals("")) {
             return Class.forName(name);

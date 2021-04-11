@@ -9,4 +9,6 @@ public interface TestDao {
     List<Test> findAll();
 
     Test findById(Test test);
+
+    int updateById(Test test);
 }

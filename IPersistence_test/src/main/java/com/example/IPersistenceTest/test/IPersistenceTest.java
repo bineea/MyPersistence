@@ -25,11 +25,12 @@ public class IPersistenceTest {
 
         Test test = new Test();
         test.setId(1);
-        System.out.println(testDao.findById(test));
+        test.setRemark("20210411-001");
+        System.out.println("更新操作："+testDao.updateById(test));
 
         List<Test> testList = testDao.findAll();
         for(Test testFor : testList) {
-            System.out.println(testFor.getId());
+            System.out.println("查询操作："+testFor.getId());
         }
     }
 

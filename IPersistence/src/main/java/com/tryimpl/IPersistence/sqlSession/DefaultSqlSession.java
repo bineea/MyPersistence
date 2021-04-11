@@ -1,5 +1,6 @@
 package com.tryimpl.IPersistence.sqlSession;
 
+import com.tryimpl.IPersistence.enums.SqlCommandType;
 import com.tryimpl.IPersistence.pojo.Configuration;
 
 import java.lang.reflect.InvocationHandler;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class DefaultSqlSession implements SqlSession {
 
-    private Configuration configuration;
+    private final Configuration configuration;
 
     public DefaultSqlSession(Configuration configuration) {
         this.configuration = configuration;
@@ -36,6 +37,22 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
+    public int update(String statementId, Object... parameter) throws Exception {
+        SimpleExecutor simpleExecutor = new SimpleExecutor();
+        return simpleExecutor.update(configuration, configuration.getMappedStatementMap().get(statementId), parameter);
+    }
+
+    @Override
+    public int delete(String statementId, Object parameter) {
+        return 0;
+    }
+
+    @Override
+    public int insert(String statementId, Object parameter) {
+        return 0;
+    }
+
+    @Override
     public <E> E getMapper(Class<?> clazz) {
 
         Object result = Proxy.newProxyInstance(DefaultSqlSession.class.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
@@ -45,13 +62,20 @@ public class DefaultSqlSession implements SqlSession {
                 String methodName = method.getName();
                 // 因为无法通过dao获取mapper配置文件中的namespace和id，所以强制规定mapper配置文件的namespace就是dao的全限定名，而mapper配置文件方法的id就是dao的方法名
                 String statementId = clazzName + "." + methodName;
-                Class<?> returnType = method.getReturnType();
-                // 判断method返回结果是否为集合，决定调用selectOne方法还是selectAll方法
-                if (returnType.isArray() || Collection.class.isAssignableFrom(returnType)) {
-                    return selectAll(statementId, args);
-                } else {
-                    return selectOne(statementId, args);
+                SqlCommandType sqlCommandType = configuration.getMappedStatementMap().get(statementId).getSqlCommandType();
+                if(sqlCommandType == SqlCommandType.SELECT) {
+                    Class<?> returnType = method.getReturnType();
+                    // 判断method返回结果是否为集合，决定调用selectOne方法还是selectAll方法
+                    if (returnType.isArray() || Collection.class.isAssignableFrom(returnType)) {
+                        return selectAll(statementId, args);
+                    } else {
+                        return selectOne(statementId, args);
+                    }
+                } else if(sqlCommandType == SqlCommandType.UPDATE) {
+                    return update(statementId, args);
                 }
+
+                return null;
             }
         });
 

@@ -12,10 +12,19 @@ public interface Executor {
      * jdbc查询操作
      * @param configuration
      * @param mappedStatement
-     * @param parameter
+     * @param parameters
      * @param <E>
      * @return
      * @throws Exception
      */
-    <E> List<E> query(Configuration configuration, MappedStatement mappedStatement, Object... parameter) throws Exception;
+    <E> List<E> query(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
+
+    /**
+     *
+     * @param configuration
+     * @param mappedStatement
+     * @param parameters
+     * @return
+     */
+    int update(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws SQLException, Exception;
 }

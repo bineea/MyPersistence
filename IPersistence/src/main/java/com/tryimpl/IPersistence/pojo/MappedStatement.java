@@ -1,5 +1,7 @@
 package com.tryimpl.IPersistence.pojo;
 
+import com.tryimpl.IPersistence.enums.SqlCommandType;
+
 public class MappedStatement {
 
     //id标识
@@ -10,6 +12,15 @@ public class MappedStatement {
     private String parameterType;
     //sql语句
     private String sql;
+    //返回值类型封装
+    //private ResultMap resultMap;
+    //参数类型封装
+    //private ParameterMap parameterMap;
+
+    //sql语句类型
+    private SqlCommandType sqlCommandType;
+
+
 
     public String getId() {
         return id;
@@ -41,5 +52,13 @@ public class MappedStatement {
 
     public void setSql(String sql) {
         this.sql = sql;
+    }
+
+    public SqlCommandType getSqlCommandType() {
+        return sqlCommandType;
+    }
+
+    public void setSqlCommandType(SqlCommandType sqlCommandType) {
+        this.sqlCommandType = sqlCommandType;
     }
 }

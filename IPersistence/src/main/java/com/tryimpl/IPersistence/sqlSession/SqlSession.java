@@ -26,6 +26,30 @@ public interface SqlSession {
     <E> E selectOne(String statementId, Object... parameter) throws Exception;
 
     /**
+     *
+     * @param statementId
+     * @param parameter
+     * @return
+     */
+    int update(String statementId, Object... parameter) throws Exception;
+
+    /**
+     *
+     * @param statementId
+     * @param parameter
+     * @return
+     */
+    int delete(String statementId, Object parameter);
+
+    /**
+     *
+     * @param statementId
+     * @param parameter
+     * @return
+     */
+    int insert(String statementId, Object parameter);
+
+    /**
      * 创建代理对象
      * @param clazz
      * @param <E>

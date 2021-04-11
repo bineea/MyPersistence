@@ -10,4 +10,8 @@
         select * from sample_test where id = #{id} ;
     </select>
 
+    <update id="updateById" parameterType="com.example.IPersistenceTest.pojo.Test">
+        update sample_test set remark=#{remark} where id = #{id};
+    </update>
+
 </mapper>
