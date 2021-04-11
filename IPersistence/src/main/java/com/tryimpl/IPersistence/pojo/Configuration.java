@@ -15,6 +15,8 @@ public class Configuration {
      */
     private Map<String, MappedStatement> mappedStatementMap = new HashMap<String, MappedStatement>();
 
+    private final MapperRegistry mapperRegistry = new MapperRegistry(this);
+
     public DataSource getDataSource() {
         return dataSource;
     }
@@ -29,5 +31,9 @@ public class Configuration {
 
     public void setMappedStatementMap(Map<String, MappedStatement> mappedStatementMap) {
         this.mappedStatementMap = mappedStatementMap;
+    }
+
+    public MapperRegistry getMapperRegistry() {
+        return mapperRegistry;
     }
 }
