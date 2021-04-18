@@ -28,23 +28,4 @@ public interface Executor {
      */
     int update(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
 
-    /**
-     * jdbc删除操作
-     * @param configuration
-     * @param mappedStatement
-     * @param parameters
-     * @return
-     * @throws Exception
-     */
-    int delete(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
-
-    /**
-     * jdbc插入操作
-     * @param configuration
-     * @param mappedStatement
-     * @param parameters
-     * @return
-     * @throws Exception
-     */
-    int insert(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
 }

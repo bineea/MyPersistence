@@ -141,16 +141,6 @@ public class SimpleExecutor implements Executor {
         return preparedStatement.executeUpdate();
     }
 
-    @Override
-    public int delete(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception {
-        return this.update(configuration, mappedStatement, parameters);
-    }
-
-    @Override
-    public int insert(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception {
-        return this.update(configuration, mappedStatement, parameters);
-    }
-
     private Class getClassByName(String name) throws ClassNotFoundException {
         if(name != null && !name.trim().equals("")) {
             return Class.forName(name);
