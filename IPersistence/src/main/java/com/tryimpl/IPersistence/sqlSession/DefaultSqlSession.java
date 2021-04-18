@@ -54,7 +54,6 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <E> E getMapper(Class<?> clazz) {
-
         Object result = Proxy.newProxyInstance(DefaultSqlSession.class.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -78,7 +77,6 @@ public class DefaultSqlSession implements SqlSession {
                 } else if(sqlCommandType == sqlCommandType.INSERT) {
                     return insert(statementId, args);
                 }
-
                 return null;
             }
         });
