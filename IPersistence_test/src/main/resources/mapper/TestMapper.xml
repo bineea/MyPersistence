@@ -7,11 +7,20 @@
     </select>
 
     <select id="findById" resultType="com.example.IPersistenceTest.pojo.Test" parameterType="com.example.IPersistenceTest.pojo.Test">
-        select * from sample_test where id = #{id} ;
+        select * from sample_test where id = #{id};
     </select>
 
     <update id="updateById" parameterType="com.example.IPersistenceTest.pojo.Test">
-        update sample_test set remark=#{remark} where id = #{id};
+        update sample_test set value = #{value}, remark = #{remark} where id = #{id};
     </update>
+
+    <delete id="deleteById">
+        delete from sample_test where id = #{id};
+    </delete>
+
+    <insert id="insert" parameterType="com.example.IPersistenceTest.pojo.Test">
+        insert into sample_test (value, fake_value, remark, create_time)
+        values (#{value}, #{fakeValue}, #{remark}, #{createTime});
+    </insert>
 
 </mapper>

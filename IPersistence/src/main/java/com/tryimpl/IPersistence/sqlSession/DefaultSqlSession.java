@@ -43,13 +43,13 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
-    public int delete(String statementId, Object parameter) {
-        return 0;
+    public int delete(String statementId, Object... parameter) throws Exception {
+        return update(statementId, parameter);
     }
 
     @Override
-    public int insert(String statementId, Object parameter) {
-        return 0;
+    public int insert(String statementId, Object... parameter) throws Exception {
+        return update(statementId, parameter);
     }
 
     @Override
@@ -73,6 +73,10 @@ public class DefaultSqlSession implements SqlSession {
                     }
                 } else if(sqlCommandType == SqlCommandType.UPDATE) {
                     return update(statementId, args);
+                } else if(sqlCommandType == SqlCommandType.DELETE) {
+                    return delete(statementId, args);
+                } else if(sqlCommandType == sqlCommandType.INSERT) {
+                    return insert(statementId, args);
                 }
 
                 return null;

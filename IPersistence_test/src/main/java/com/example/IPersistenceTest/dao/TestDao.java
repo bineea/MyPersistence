@@ -11,4 +11,8 @@ public interface TestDao {
     Test findById(Test test);
 
     int updateById(Test test);
+
+    int deleteById(long id);
+
+    int insert(Test test);
 }

@@ -35,6 +35,7 @@ public class SimpleExecutor implements Executor {
         //5. 设置参数，赋值占位符
         String parameterType = mappedStatement.getParameterType();
         if(parameterType != null && !parameterType.trim().isEmpty()) {
+            //参数类型不为空
             Class parameterClass = getClassByName(parameterType);
             for(int i=0; i<parameterMappings.size(); i++ ) {
                 Object obj = null;
@@ -51,6 +52,7 @@ public class SimpleExecutor implements Executor {
                 preparedStatement.setObject(i+1, obj);
             }
         } else {
+            //参数类型为空
             for(int i=0; i<parameterMappings.size(); i++ ) {
                 if(parameterMappings.size() != parameters.length) {
                     throw new RuntimeException("参数个数与sql语句参数个数不匹配");
@@ -108,9 +110,11 @@ public class SimpleExecutor implements Executor {
         //5. 设置参数，赋值占位符
         String parameterType = mappedStatement.getParameterType();
         if(parameterType != null && !parameterType.trim().isEmpty()) {
+            //参数类型不为空
             Class parameterClass = getClassByName(parameterType);
             for(int i=0; i<parameterMappings.size(); i++ ) {
                 Object obj = null;
+                //如何参数类型为“基本类型”、“数组”、“集合”则判断参数个数
                 if(parameterClass.isPrimitive() || parameterClass.isArray() || Collection.class.isAssignableFrom(parameterClass)) {
                     if(parameterMappings.size() != parameters.length) {
                         throw new RuntimeException("参数个数与sql语句参数个数不匹配");
@@ -124,6 +128,7 @@ public class SimpleExecutor implements Executor {
                 preparedStatement.setObject(i+1, obj);
             }
         } else {
+            //参数类型为空
             for(int i=0; i<parameterMappings.size(); i++ ) {
                 if(parameterMappings.size() != parameters.length) {
                     throw new RuntimeException("参数个数与sql语句参数个数不匹配");
@@ -134,6 +139,16 @@ public class SimpleExecutor implements Executor {
 
         //6. 执行sql语句
         return preparedStatement.executeUpdate();
+    }
+
+    @Override
+    public int delete(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception {
+        return this.update(configuration, mappedStatement, parameters);
+    }
+
+    @Override
+    public int insert(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception {
+        return this.update(configuration, mappedStatement, parameters);
     }
 
     private Class getClassByName(String name) throws ClassNotFoundException {

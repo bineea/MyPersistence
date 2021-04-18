@@ -39,7 +39,7 @@ public interface SqlSession {
      * @param parameter
      * @return
      */
-    int delete(String statementId, Object parameter);
+    int delete(String statementId, Object... parameter) throws Exception;
 
     /**
      *
@@ -47,7 +47,7 @@ public interface SqlSession {
      * @param parameter
      * @return
      */
-    int insert(String statementId, Object parameter);
+    int insert(String statementId, Object... parameter) throws Exception;
 
     /**
      * 创建代理对象

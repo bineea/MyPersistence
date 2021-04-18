@@ -20,11 +20,31 @@ public interface Executor {
     <E> List<E> query(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
 
     /**
-     *
+     * jdbc更新操作
      * @param configuration
      * @param mappedStatement
      * @param parameters
      * @return
      */
-    int update(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws SQLException, Exception;
+    int update(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
+
+    /**
+     * jdbc删除操作
+     * @param configuration
+     * @param mappedStatement
+     * @param parameters
+     * @return
+     * @throws Exception
+     */
+    int delete(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
+
+    /**
+     * jdbc插入操作
+     * @param configuration
+     * @param mappedStatement
+     * @param parameters
+     * @return
+     * @throws Exception
+     */
+    int insert(Configuration configuration, MappedStatement mappedStatement, Object... parameters) throws Exception;
 }
